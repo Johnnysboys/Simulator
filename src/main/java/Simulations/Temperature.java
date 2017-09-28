@@ -65,15 +65,15 @@ public class Temperature implements Runnable {
         return setPoint;
     }
 
-    public void setSetPoint(float setPoint) throws SetPointException {
-        System.out.println(setPoint);
-        if(setPoint > 0 && setPoint <= 30){
-            System.out.println("The set point is now " + setPoint);
-            this.setPoint = setPoint;
-        } else {
-            throw new SetPointException("Error: The setpoint is outside the allowed region (0 - 30)");
-        }
+    public void setSetPoint(float setPoint) {
+        this.setPoint = setPoint;
     }
 
+    public float getRoomTemperature() {
+        return roomTemperature;
+    }
 
+    public void setRoomTemperature(float roomTemperature) {
+        this.roomTemperature = roomTemperature;
+    }
 }
