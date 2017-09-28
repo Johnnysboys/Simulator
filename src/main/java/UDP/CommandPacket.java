@@ -1,6 +1,10 @@
+package UDP;
+
+import Interfaces.IMessage;
+
 import java.net.DatagramPacket;
 
-public class CommandPacket implements IMessage{
+public class CommandPacket implements IMessage {
     private byte command;
     private byte serialNo;
     private byte size; // Length of data

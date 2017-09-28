@@ -1,3 +1,9 @@
+package UDP;
+
+import Interfaces.ICommands;
+import Interfaces.IMessage;
+import Simulations.PLCSim;
+
 import java.io.IOException;
 import java.net.*;
 
@@ -31,6 +37,7 @@ public class UDPConnection implements Runnable, IMessage, ICommands {
      */
 
     public void respond(byte command, byte serialNo, byte data){
+        System.out.println(this.simulator.getName() + " responding to " + command + " with data: " + data);
         byte[] msg = Message.packMessage(command, serialNo, data);
 
         try {
@@ -64,6 +71,7 @@ public class UDPConnection implements Runnable, IMessage, ICommands {
             DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
             try {
                 this.serverSocket.receive(receivePacket);
+                System.out.println(this.simulator.getName() + " received a command");
                 // Set the recent(port/host) to the last one who talked to us
                 // so we can respond the the correct one.
                 this.recentHost = receivePacket.getAddress();

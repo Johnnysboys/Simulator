@@ -1,3 +1,9 @@
+package Simulations;
+
+import Interfaces.ICommands;
+import UDP.CommandPacket;
+import UDP.UDPConnection;
+
 import java.net.SocketException;
 
 public class PLCSim implements ICommands {
@@ -9,7 +15,14 @@ public class PLCSim implements ICommands {
     private UDPConnection server;
 
 
-
+    /**
+     * Creates a new simulator.
+     * It tries to emulate the PLC of the physical green houses.
+     *
+     * @param name - The name of the PLC
+     * @param port - Port for PLC UDP listener.
+     * @throws SocketException
+     */
     public PLCSim(String name, int port) throws SocketException {
         this.name = name;
         this.server = new UDPConnection(port, this);
@@ -32,7 +45,7 @@ public class PLCSim implements ICommands {
                 this.waterLevel.addWater(commandPacket.getData());
                 break;
             case READ_GREENHOUSE_TEMP:
-                byte temp = (byte) this.temperature.getSetPoint();
+                byte temp = (byte) this.temperature.getTemperature();
                 this.server.respond(READ_GREENHOUSE_TEMP_ACK, commandPacket.getSerialNo(), temp);
                 break;
             case READ_MOISTURE:
@@ -47,6 +60,18 @@ public class PLCSim implements ICommands {
                 byte waterLevel = (byte) this.waterLevel.readWaterLevel();
                 this.server.respond(READ_WATER_LEVEL_ACK, commandPacket.getSerialNo(), waterLevel);
                 break;
+            default:
+                // send an respond to a command this simulator cant do eg. setRedLight
+                this.server.respond((byte) (commandPacket.getCommand() + 0x40), commandPacket.getSerialNo(), commandPacket.getData());
+                break;
         }
+    }
+
+    /**
+     * Returns the name of the PLC simulation
+     * @return string
+     */
+    public String getName() {
+        return name;
     }
 }

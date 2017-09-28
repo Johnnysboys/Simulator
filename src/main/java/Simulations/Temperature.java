@@ -1,18 +1,24 @@
+package Simulations;
+
 public class Temperature implements Runnable {
 
-    private float temperature = 17f;
-    private float roomTemperature = 16f;
+    private double temperature = 17f;
+    private double roomTemperature = 16f;
+    private int temperatureFallDelay = 1000; // in ms
     private boolean heating = true;
-    private float deltaOn = 1.006f;
-    private float deltaOff = 0.906f;
-    private float setPoint;
-    private boolean on = false;
+    private double deltaOn = 1.006f; // ~ 0.4%
+    private double deltaOff = 0.995f; // ~ 0.5%
+    private double setPoint;
 
+    /**
+     * Simulate the temperature.
+     */
     public Temperature(){
-        this.setPoint = 25f;
+        this.setPoint = this.temperature;
         new Thread(this).start();
     }
-    public Temperature(float setPoint){
+
+    public Temperature(double setPoint){
         this.setPoint = setPoint;
         new Thread(this).start();
     }
@@ -21,59 +27,56 @@ public class Temperature implements Runnable {
     @Override
     public void run() {
         while(true){
-
-            if(this.temperature < this.setPoint && this.on){
+            // Only heat the green house if its below the temperature
+            if(this.temperature <= this.setPoint){
                 this.heating = true;
             } else {
                 this.heating = false;
             }
 
+            // the temperature rises with ~0.4%
             if(this.heating){
                 this.temperature *= deltaOn;
             }
 
+            // The temperature falls with ~0.5%
             if(!this.heating && !(this.temperature <= this.roomTemperature)){
                 this.temperature *= deltaOff;
             }
 
+            if(this.temperature <= this.roomTemperature){
+                this.temperature = this.roomTemperature;
+            }
             try {
-                Thread.sleep(1000l);
+                Thread.sleep(this.temperatureFallDelay);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
-    public boolean isHeating() {
-        return heating;
-    }
 
-    public float getTemperature() {
-        return temperature;
-    }
 
-    public boolean isOn() {
-
-        return on;
-    }
-
-    public void setOn(boolean on) {
-        System.out.println("temperature on");
-        this.on = on;
-    }
-
-    public float getSetPoint() {
-        return setPoint;
-    }
-
-    public void setSetPoint(float setPoint) {
+    /**
+     * Set the temperature set point
+     * @param setPoint
+     */
+    public void setSetPoint(double setPoint) {
         this.setPoint = setPoint;
     }
 
-    public float getRoomTemperature() {
+    /**
+     * Returns the "room temperature" around the green house
+     * @return double
+     */
+    public double getRoomTemperature() {
         return roomTemperature;
     }
 
-    public void setRoomTemperature(float roomTemperature) {
-        this.roomTemperature = roomTemperature;
+    /**
+     * Returns the current "temperature" inside the green house
+     * @return double
+     */
+    public double getTemperature() {
+        return temperature;
     }
 }
