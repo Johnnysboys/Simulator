@@ -74,4 +74,5 @@ public class PLCSim implements ICommands {
     public String getName() {
         return name;
     }
+    public int getPort() { return this.server.getPort(); }
 }

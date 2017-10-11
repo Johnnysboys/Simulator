@@ -82,4 +82,7 @@ public class UDPConnection implements Runnable, IMessage, ICommands {
             this.simulator.decodeCommand(new CommandPacket(receivePacket));
         }
     }
+    public int getPort(){
+        return this.serverSocket.getLocalPort();
+    }
 }
