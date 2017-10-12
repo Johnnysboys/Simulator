@@ -1,9 +1,9 @@
+import Helpers.Logger;
+import Helpers.Types;
 import Interfaces.ICommands;
 import Simulations.PLCSim;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Main implements ICommands {
     public static void main(String args[]) throws Exception {
@@ -33,7 +33,7 @@ public class Main implements ICommands {
         for(int i = 0; i < amount; i++){
             PLCSim sim = new PLCSim("Sim " + i, port + (i * 10));
             sims.add(sim);
-            System.out.println("Started " + sim.getName() + " on port " + sim.getPort());
+            Logger.Log(Types.INFO,"Started " + sim.getName() + " on port " + sim.getPort());
 
         }
 
